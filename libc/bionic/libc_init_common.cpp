@@ -45,7 +45,7 @@
 #include "pthread_internal.h"
 
 extern "C" abort_msg_t** __abort_message_ptr;
-extern "C" int __system_properties_init(void);
+//extern "C" int __system_properties_init(void);
 extern "C" int __set_tls(void* ptr);
 extern "C" int __set_tid_address(int* tid_address);
 
@@ -116,7 +116,7 @@ void __libc_init_common(KernelArgumentBlock& args) {
   pthread_internal_t* main_thread = __get_thread();
   _pthread_internal_add(main_thread);
 
-  __system_properties_init(); // Requires 'environ'.
+  //__system_properties_init(); // Requires 'environ'.
 
   __libc_init_vdso();
 }
