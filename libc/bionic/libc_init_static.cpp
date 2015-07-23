@@ -85,11 +85,19 @@ static void apply_gnu_relro() {
   }
 }
 
+static char* argv[] = {"TEST"};
+static char* envp[] = {NULL, NULL};
+static const long auxv = 0;
+
 __noreturn void __libc_init(void* raw_args,
                             void (*onexit)(void) __unused,
                             int (*slingshot)(int, char**, char**),
                             structors_array_t const * const structors) {
   KernelArgumentBlock args(raw_args);
+  args.argc = 1;
+  args.argv = argv;
+  args.envp = envp;
+  args.auxv = (ElfW(auxv_t)*)&auxv;
   __libc_init_tls(args);
   __libc_init_common(args);
 

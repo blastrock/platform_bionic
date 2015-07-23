@@ -33,6 +33,8 @@ struct abort_msg_t;
 class KernelArgumentBlock {
  public:
   KernelArgumentBlock(void* raw_args) {
+    return;
+
     uintptr_t* args = reinterpret_cast<uintptr_t*>(raw_args);
     argc = static_cast<int>(*args);
     argv = reinterpret_cast<char**>(args + 1);
