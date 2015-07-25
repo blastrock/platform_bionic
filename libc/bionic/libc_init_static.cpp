@@ -101,7 +101,7 @@ __noreturn void __libc_init(void* raw_args,
   __libc_init_tls(args);
   __libc_init_common(args);
 
-  apply_gnu_relro();
+  //apply_gnu_relro();
 
   // Several Linux ABIs don't pass the onexit pointer, and the ones that
   // do never use it.  Therefore, we ignore it.
