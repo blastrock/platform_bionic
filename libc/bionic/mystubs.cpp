@@ -42,3 +42,14 @@ int getpagesize() {
   // We dont use sysconf(3) here because that drags in stdio, which makes static binaries fat.
   return PAGE_SIZE;
 }
+
+static passwd pw;
+
+passwd* getpwnam(const char*) {
+  pw.pw_name  = (char*)"user0";
+  pw.pw_uid   = 1;
+  pw.pw_gid   = 1;
+  pw.pw_dir   = (char*)"/";
+  pw.pw_shell = (char*)"/busybox";
+  return &pw;
+}

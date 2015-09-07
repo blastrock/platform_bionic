@@ -62,11 +62,11 @@
 #define HAVE_UTMPX_H		0
 #endif /* !defined HAVE_UTMPX_H */
 
-#if !defined(__ANDROID__)
-#ifndef LOCALE_HOME
-#define LOCALE_HOME		"/usr/lib/locale"
-#endif /* !defined LOCALE_HOME */
-#endif // __ANDROID__
+//#if !defined(__ANDROID__)
+//#ifndef LOCALE_HOME
+//#define LOCALE_HOME		"/usr/lib/locale"
+//#endif /* !defined LOCALE_HOME */
+//#endif // __ANDROID__
 
 #if HAVE_INCOMPATIBLE_CTIME_R
 #define asctime_r _incompatible_asctime_r

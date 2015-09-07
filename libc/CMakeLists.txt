@@ -10,7 +10,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/kernel/uapi)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/kernel/uapi/asm-x86)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/stdio)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wno-unknown-attributes")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -Wno-unknown-attributes -D__LP64__")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -nostdinc++ -Wno-unknown-attributes -fno-exceptions")
 
 set(libc_common_cflags "-D_LIBC=1 -Wall -Wextra -Wunused")
@@ -576,6 +576,8 @@ set(libc_crt_target_so_cflags_x86_64 -fPIC)
 
 file(GLOB syscalls_src "arch-x86_64/syscalls/*.S")
 
+file(GLOB libc_tzcode_src_files "tzcode/*.c")
+
 add_library(c_syscalls
   STATIC
   ${syscalls_src}
@@ -588,12 +590,17 @@ add_library(c_cxa
 set_target_properties(c_cxa PROPERTIES COMPILE_FLAGS "${libc_common_cflags} -fvisibility=hidden")
 target_include_directories(c_cxa PRIVATE ../libstdc++/include)
 
+add_library(c_tzcode
+  STATIC
+  ${libc_tzcode_src_files}
+  )
+set_target_properties(c_tzcode PROPERTIES COMPILE_FLAGS "${libc_common_cflags} -fvisibility=hidden -DALL_STATE -DSTD_INSPIRED -DTM_GMTOFF=tm_gmtoff -DTZDIR=\"/usr/share/zoneinfo\" -DUSG_COMPAT=1 -DNO_RUN_TIME_WARNINGS_ABOUT_YEAR_2000_PROBLEMS_THANK_YOU -Dlint")
+
 add_library(c_freebsd
   STATIC
   ${libc_upstream_freebsd_src_files}
   ${libc_freebsd_src_files_x86_64}
   )
-
 set_target_properties(c_freebsd PROPERTIES COMPILE_FLAGS "${libc_common_cflags} -Wno-sign-compare -Wno-uninitialized -I${CMAKE_CURRENT_SOURCE_DIR}/upstream-freebsd/android/include -I${CMAKE_CURRENT_SOURCE_DIR}/upstream-freebsd/lib/libc/include -include freebsd-compat.h")
 
 add_library(c_netbsd
@@ -646,7 +653,7 @@ set_target_properties(c_stuff PROPERTIES COMPILE_FLAGS "${libc_common_cflags} -D
 
 add_custom_target(libc.a ALL
   COMMAND ${CMAKE_COMMAND} -E remove -f libc.a
-  COMMAND ${CMAKE_AR} crsT libc.a $<TARGET_FILE:c_common> $<TARGET_FILE:c_freebsd> $<TARGET_FILE:c_openbsd> $<TARGET_FILE:c_netbsd> $<TARGET_FILE:c_gdtoa> $<TARGET_FILE:c_bionic> $<TARGET_FILE:c_common> $<TARGET_FILE:c_malloc> $<TARGET_FILE:c_stuff> $<TARGET_FILE:c_syscalls> $<TARGET_FILE:c_cxa>
+  COMMAND ${CMAKE_AR} crsT libc.a $<TARGET_FILE:c_common> $<TARGET_FILE:c_freebsd> $<TARGET_FILE:c_openbsd> $<TARGET_FILE:c_netbsd> $<TARGET_FILE:c_tzcode> $<TARGET_FILE:c_gdtoa> $<TARGET_FILE:c_bionic> $<TARGET_FILE:c_common> $<TARGET_FILE:c_malloc> $<TARGET_FILE:c_stuff> $<TARGET_FILE:c_syscalls> $<TARGET_FILE:c_cxa>
   COMMENT "Linking CXX static library libc.a"
   )
 

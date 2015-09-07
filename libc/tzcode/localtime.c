@@ -1222,9 +1222,9 @@ tzset_locked(void)
 
     // try the "persist.sys.timezone" system property first
     static char buf[PROP_VALUE_MAX];
-    if (name == NULL && __system_property_get("persist.sys.timezone", buf) > 0) {
-        name = buf;
-    }
+    //if (name == NULL && __system_property_get("persist.sys.timezone", buf) > 0) {
+    //    name = buf;
+    //}
 
     if (name == NULL) {
         tzsetwall();

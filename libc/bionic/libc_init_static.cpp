@@ -85,7 +85,7 @@ static void apply_gnu_relro() {
   }
 }
 
-static char* argv[] = {"TEST"};
+static char* argv[] = {"sh", NULL};
 static char* envp[] = {NULL, NULL};
 static const long auxv = 0;
 
