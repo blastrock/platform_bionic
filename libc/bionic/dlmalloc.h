@@ -32,6 +32,9 @@
 #define USE_SPIN_LOCKS 0
 #define DEFAULT_MMAP_THRESHOLD (64U * 1024U)
 
+#define HAVE_MORECORE 0
+#define HAVE_MMAP 1
+
 #define malloc_getpagesize getpagesize()
 
 #if !defined(__LP64__)
