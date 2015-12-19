@@ -33,12 +33,12 @@ struct abort_msg_t;
 class KernelArgumentBlock {
  public:
   KernelArgumentBlock(void* raw_args) {
-    return;
-
     uintptr_t* args = reinterpret_cast<uintptr_t*>(raw_args);
     argc = static_cast<int>(*args);
     argv = reinterpret_cast<char**>(args + 1);
     envp = argv + argc + 1;
+
+    return;
 
     // Skip over all environment variable definitions to find aux vector.
     // The end of the environment block is marked by two NULL pointers.
